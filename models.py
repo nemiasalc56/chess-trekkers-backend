@@ -11,12 +11,19 @@ DATABASE = SqliteDatabase('users.sqlite')
 
 # define our model
 class User(Model):
-	username = CharField()
+	username = CharField(unique=True)
+
+	# this gives our class instructions on how to connect to a specific databse
+	class Meta:
+		database = DATABASE
+
+
+class Score(Model):
+	owner = ForeignKeyField(User, backref='scores')
 	high_score = CharField() 
 	rank = CharField()
 	date = DateTimeField(default=datetime.datetime.now)
 
-	# this gives our class instructions on how to connect to a specific databse
 	class Meta:
 		database = DATABASE
 
@@ -27,7 +34,7 @@ class User(Model):
 # this method will set up the connection to our database
 def initialize():
 	DATABASE.connect()
-	DATABASE.create_tables([User], safe=True)
+	DATABASE.create_tables([User, Score], safe=True)
 
 	print("Connected to database and created tables if they weren't already there.")
 
