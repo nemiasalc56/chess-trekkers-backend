@@ -29,3 +29,24 @@ def score():
 		message="Succesfully created score",
 		status=200
 		), 200
+
+
+# score create route
+@scores.route('/', methods=['GET'])
+def get_score():
+	# get the information from the reques
+	payload = request.get_json()
+	print(payload)
+
+	# create the score
+	user_score = models.Score.get(models.Score.owner == payload['owner'])
+	print("printing user_score")
+	print(user_score)
+
+	score_dict = model_to_dict(user_score)
+
+	return jsonify(
+		data=score_dict,
+		message="Succesfully created score",
+		status=200
+		), 200
