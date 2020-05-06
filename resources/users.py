@@ -19,6 +19,8 @@ def user_profile():
 	payload = request.get_json()
 	print(payload)
 
+	# make it lower case
+	payload['username'] = payload['username'].lower()
 
 	try:
 		# check if the username already exist
@@ -46,5 +48,35 @@ def user_profile():
 			message=f"Succesfully created user with username {user_dict['username']}",
 			status=200
 			), 200
+
+
+# user login route
+@users.route('/login', methods=['POST'])
+def get_user():
+	# get the information from the reques
+	payload = request.get_json()
+	print(payload)
+
+	payload['username'] = payload['username'].lower()
+
+
+	try:
+		
+		user = models.User.get(models.User.username == payload['username'])
+		user_dict = model_to_dict(user)
+
+		return jsonify(
+			data=user_dict,
+			message="Foud user Succesfully",
+			status=200
+			), 200
+
+	except:
+		return jsonify(
+			data={},
+			message="There is no user with this username",
+			status=401
+			), 402
+
 
 
