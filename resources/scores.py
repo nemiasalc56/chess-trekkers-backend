@@ -31,7 +31,7 @@ def score():
 		), 200
 
 
-# score create route
+# score get route
 @scores.route('/', methods=['GET'])
 def get_score():
 	# get the information from the reques
@@ -48,5 +48,20 @@ def get_score():
 	return jsonify(
 		data=score_dict,
 		message="Succesfully created score",
+		status=200
+		), 200
+
+
+# score update route
+@scores.route('/<id>', methods=['PUT'])
+def update_score(id):
+	# get the information from the reques
+	payload = request.get_json()
+	print(payload)
+
+
+	return jsonify(
+		data=score_dict,
+		message="You hit the score update route",
 		status=200
 		), 200
