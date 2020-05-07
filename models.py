@@ -12,6 +12,7 @@ DATABASE = SqliteDatabase('users.sqlite')
 # define our model
 class User(Model):
 	username = CharField(unique=True)
+	password = CharField()
 
 	# this gives our class instructions on how to connect to a specific databse
 	class Meta:
