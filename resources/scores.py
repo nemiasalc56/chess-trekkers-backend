@@ -83,6 +83,8 @@ def update_score(id):
 
 		# convert score to dictionary
 		score_dict = model_to_dict(score)
+		# remove the password
+		score_dict['owner'].pop('password')
 
 		return jsonify(
 			data=score_dict,
