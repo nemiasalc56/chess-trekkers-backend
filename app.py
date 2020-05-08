@@ -4,6 +4,7 @@ import models
 from resources.users import users
 from resources.scores import scores
 from flask_cors import CORS
+from flask_login import LoginManager
 
 
 
@@ -15,6 +16,12 @@ app = Flask(__name__)
 # set up a secret key
 app.secret_key = "kjkjsfijs984u39ffn48fjskldf"
 
+
+# instantiate LoginManager to a login_manager
+login_manager = LoginManager()
+
+# connect the app with login_manager
+login_manager.init_app(app)
 
 
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)

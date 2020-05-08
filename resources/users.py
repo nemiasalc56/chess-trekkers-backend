@@ -18,6 +18,7 @@ def register():
 
 	# get the information from the request
 	payload = request.get_json()
+	print('this is payload ', payload)
 	
 	# make username lower case
 	payload['username'] = payload['username'].lower()
@@ -43,7 +44,8 @@ def register():
 		login_user(new_user)
 
 		user_dict = model_to_dict(new_user)
-		
+		print('this is user_dict ', user_dict)
+
 		# remove the password
 		user_dict.pop('password')
 

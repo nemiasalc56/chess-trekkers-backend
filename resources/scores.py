@@ -1,6 +1,7 @@
 # import our models and blueprint
 import models
 from flask import Blueprint, request, jsonify
+from flask_login import current_user
 from playhouse.shortcuts import model_to_dict
 
 
@@ -59,9 +60,29 @@ def update_score(id):
 	payload = request.get_json()
 	print(payload)
 
+	# look up score that matches the id
+	score = models.Score.get_by_id(id)
 
-	return jsonify(
-		data=score_dict,
-		message="You hit the score update route",
-		status=200
-		), 200
+	# check if this user is the owner
+	if score.owner.id == current_user.id:
+		# if it does, then we can proceed
+
+		score.high_score = payload['high_score'] if 'high_score' in payload else None
+		score.rank = payload['rank'] if 'rank' in payload else None
+		# save the changes
+		score.save()
+
+		# convert score to dictionary
+		score_dict = model_to_dict(score)
+
+		return jsonify(
+			data=score_dict,
+			message="Succesfully updated score and rank",
+			status=200
+			), 200
+	else: 
+		return jsonify(
+			data={},
+			message="This user is not the owner of this score",
+			status=401
+			), 401
