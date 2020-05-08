@@ -24,6 +24,28 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+# user loader will use this callback to load the user object
+@login_manager.user_loader
+def load_user(user_id):
+	try:
+		# look up user
+		return models.User.get(models.User.id == user_id)
+	except models.DoesNotExist:
+		return None
+
+@login_manager.unauthorized_handler
+def unauthorized():
+
+	return jsonify(
+		data={
+		'error': 'FORBIDDEN'
+		},
+		message="You are not allow to do that, you must be logged in",
+		status=403
+		), 403
+
+
+
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(scores, origins=['http://localhost:3000'],supports_credentials=True)
 

@@ -18,12 +18,14 @@ def score():
 
 	# create the score
 	new_score = models.Score.create(
-		owner=payload['owner'],
+		owner=current_user.id,
 		high_score=payload['high_score'],
 		rank=payload['rank']
 		)
 
 	score_dict = model_to_dict(new_score)
+	score_dict['owner'].pop('password')
+	print(score_dict['owner'])
 
 	return jsonify(
 		data=score_dict,
@@ -40,11 +42,18 @@ def get_score():
 	print(payload)
 
 	# create the score
-	user_score = models.Score.get(models.Score.owner == payload['owner'])
-	print("printing user_score")
-	print(user_score)
+	# user_score = models.Score.get(models.Score.owner == current_user.id)
+	user_scores = models.Score.select()
 
-	score_dict = model_to_dict(user_score)
+	print("printing user_score")
+
+	score_dict = [model_to_dict(score) for score in user_scores]
+
+	# remove the password
+	for score in score_dict:
+		score['owner'].pop('password')
+
+	print(score_dict)
 
 	return jsonify(
 		data=score_dict,
